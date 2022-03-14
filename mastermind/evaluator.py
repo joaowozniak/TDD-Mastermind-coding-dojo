@@ -13,19 +13,12 @@ class MastermindGuessEvaluator:
             if secret[idx] == guess[idx]:
                 wellplaced += 1
             else:
-                if secret[idx] not in secretColours:
-                    secretColours[secret[idx]] = 1
-                else: 
-                    secretColours[secret[idx]] += 1
-
-                if guess[idx] not in misplacedColours:                    
-                    misplacedColours[guess[idx]] = 1
-                else: 
-                    misplacedColours[guess[idx]] += 1
-
-        misplaced = self.__count_misplaced(misplacedColours, secretColours)            
-     
-        return GuessResult(wellplaced, misplaced)   
+                secretColours.setdefault(secret[idx], 1)                
+                secretColours[secret[idx]] += 1
+                misplacedColours.setdefault(guess[idx], 0)
+                misplacedColours[guess[idx]] += 1
+                        
+        return GuessResult(wellplaced, self.__count_misplaced(misplacedColours, secretColours))   
 
     def __count_misplaced(self, misplacedColours: dict, secretColours:dict) -> int:
         misplaced = 0
